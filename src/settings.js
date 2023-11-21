@@ -9,7 +9,8 @@ let now = () => Date.now(),
   defaultLocale = null,
   defaultNumberingSystem = null,
   defaultOutputCalendar = null,
-  throwOnInvalid;
+  throwOnInvalid,
+  forceHackyOffset = false;
 
 /**
  * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
@@ -114,6 +115,23 @@ export default class Settings {
    */
   static set throwOnInvalid(t) {
     throwOnInvalid = t;
+  }
+
+  /**
+   * Get whether Luxon will always use hackyOffset for calculation time zone
+   * offsets.
+   */
+  static get forceHackyOffset() {
+    return forceHackyOffset;
+  }
+
+  /**
+   * Set whether Luxon will always use hackyOffset for calculating time zone
+   * offsets. This can be much faster than the safer/cleaner partsOffset based
+   * on formatToParts.
+   */
+  static set forceHackyOffset(f) {
+    forceHackyOffset = f;
   }
 
   /**

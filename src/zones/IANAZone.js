@@ -1,5 +1,6 @@
 import { formatOffset, parseZoneInfo, isUndefined, objToLocalTS } from "../impl/util.js";
 import Zone from "../zone.js";
+import Settings from "../settings.js";
 
 let dtfCache = {};
 function makeDTF(zone) {
@@ -33,7 +34,7 @@ function hackyOffset(dtf, date) {
   const formatted = dtf.format(date).replace(/\u200E/g, ""),
     parsed = /(\d+)\/(\d+)\/(\d+) (AD|BC),? (\d+):(\d+):(\d+)/.exec(formatted),
     [, fMonth, fDay, fYear, fadOrBc, fHour, fMinute, fSecond] = parsed;
-  return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
+  return [+fYear, +fMonth, +fDay, fadOrBc, +fHour, +fMinute, +fSecond];
 }
 
 function partsOffset(dtf, date) {
@@ -150,9 +151,10 @@ export default class IANAZone extends Zone {
     if (isNaN(date)) return NaN;
 
     const dtf = makeDTF(this.name);
-    let [year, month, day, adOrBc, hour, minute, second] = dtf.formatToParts
-      ? partsOffset(dtf, date)
-      : hackyOffset(dtf, date);
+    let [year, month, day, adOrBc, hour, minute, second] =
+      dtf.formatToParts && !Settings.forceHackyOffset
+        ? partsOffset(dtf, date)
+        : hackyOffset(dtf, date);
 
     if (adOrBc === "BC") {
       year = -Math.abs(year) + 1;
