@@ -455,4 +455,8 @@ export default class Locale {
       this.outputCalendar === other.outputCalendar
     );
   }
+
+  toString() {
+    return `Locale(${this.locale}, ${this.numberingSystem}, ${this.outputCalendar})`;
+  }
 }
