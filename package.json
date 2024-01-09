@@ -27,8 +27,8 @@
     "format-check": "prettier --check 'src/**/*.js' 'test/**/*.js' 'benchmarks/*.js'",
     "benchmark": "babel-node benchmarks/index.js",
     "codecov": "codecov",
-    "prepack": "babel-node tasks/buildAll.js",
-    "prepare": "husky install"
+    "prepare": "babel-node tasks/buildAll.js",
+    "postinstall": "husky install"
   },
   "lint-staged": {
     "*.{js,json}": [
