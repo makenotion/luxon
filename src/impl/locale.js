@@ -61,6 +61,14 @@ function systemLocale() {
   }
 }
 
+let intlResolvedOptionsCache = {};
+function getCachedIntResolvedOptions(locString) {
+  if (!intlResolvedOptionsCache[locString]) {
+    intlResolvedOptionsCache[locString] = new Intl.DateTimeFormat(locString).resolvedOptions();
+  }
+  return intlResolvedOptionsCache[locString];
+}
+
 function parseLocaleString(localeStr) {
   // I really want to avoid writing a BCP 47 parser
   // see, e.g. https://github.com/wooorm/bcp-47
@@ -143,7 +151,7 @@ function supportsFastNumbers(loc) {
       loc.numberingSystem === "latn" ||
       !loc.locale ||
       loc.locale.startsWith("en") ||
-      new Intl.DateTimeFormat(loc.intl).resolvedOptions().numberingSystem === "latn"
+      getCachedIntResolvedOptions(loc.locale).numberingSystem === "latn"
     );
   }
 }
@@ -272,7 +280,6 @@ class PolyRelFormatter {
 /**
  * @private
  */
-
 export default class Locale {
   static fromOpts(opts) {
     return Locale.create(opts.locale, opts.numberingSystem, opts.outputCalendar, opts.defaultToEN);
@@ -292,6 +299,7 @@ export default class Locale {
     intlDTCache = {};
     intlNumCache = {};
     intlRelCache = {};
+    intlResolvedOptionsCache = {};
   }
 
   static fromObject({ locale, numberingSystem, outputCalendar } = {}) {
@@ -444,7 +452,7 @@ export default class Locale {
     return (
       this.locale === "en" ||
       this.locale.toLowerCase() === "en-us" ||
-      new Intl.DateTimeFormat(this.intl).resolvedOptions().locale.startsWith("en-us")
+      getCachedIntResolvedOptions(this.intl).locale.startsWith("en-us")
     );
   }
 
