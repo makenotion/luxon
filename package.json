@@ -26,9 +26,7 @@
     "format": "prettier --write 'src/**/*.js' 'test/**/*.js' 'benchmarks/*.js'",
     "format-check": "prettier --check 'src/**/*.js' 'test/**/*.js' 'benchmarks/*.js'",
     "benchmark": "babel-node benchmarks/index.js",
-    "codecov": "codecov",
-    "postinstall": "husky install || exit 0",
-    "prepare": "babel-node tasks/buildAll.js"
+    "codecov": "codecov"
   },
   "lint-staged": {
     "*.{js,json}": [
